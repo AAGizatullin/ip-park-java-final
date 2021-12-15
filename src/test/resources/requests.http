@@ -1,0 +1,124 @@
+###
+
+POST http://localhost:8080/media/bytes
+Content-Type: image/jpeg
+
+< bath.jpg
+
+> {%
+ client.global.set('mediaName', response.body.name);
+
+ %}
+
+
+###
+
+POST http://localhost:8080/media/multipart
+Content-Type: multipart/form-data; boundary=WebBoundary
+
+--WebBoundary
+Content-Disposition: form-data; name="file"; filename="leviafan.jpg"
+Content-Type: image/jpeg
+
+< leviafan.jpg
+--WebBoundary--
+
+###
+
+POST http://localhost:8080/media/multi-multipart
+Content-Type: multipart/form-data; boundary=WebBoundary
+
+--WebBoundary
+Content-Disposition: form-data; name="files"; filename="javalog.jpg"
+Content-Type: image/jpeg
+
+< javalog.jpg
+--WebBoundary
+Content-Disposition: form-data; name="files"; filename="music.mp3"
+Content-Type: audio/mpeg
+
+< music.mp3
+--WebBoundary--
+
+###
+
+GET http://localhost:8080/films/getAll
+
+###
+
+GET http://localhost:8080/films/getById?id=9
+
+###
+
+GET http://localhost:8080/films/getById/1
+
+###
+
+GET http://localhost:8080/films/searchByName?text=term
+
+###
+
+GET http://localhost:8080/films/searchByGenre?text=comedy
+###
+
+POST http://localhost:8080/films/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "Ирония судьбы, или С легким паром! ",
+  "price": 150,
+  "productionYear": 1975,
+  "country": [
+    "USSR"
+  ],
+  "genre": [
+    "comedy",
+    "melodrama"
+  ],
+  "rating": 8.2,
+  "views": 450,
+  "image":"bath.jpg"
+}
+
+###
+
+POST http://localhost:8080/films/save
+Content-Type: application/json
+
+{
+  "id": 9,
+  "name": "Левиафан",
+  "price": 100,
+  "productionYear": 2014,
+  "country": [
+    "Russia"
+  ],
+  "genre": [
+    "drama"
+  ],
+  "rating": 6.9,
+  "views": 120,
+  "image": "leviafan.jpg"
+}
+
+###
+
+POST http://localhost:8080/films/removeById?id=6
+
+###
+
+POST http://localhost:8080/films/removeById/6
+
+###
+
+POST http://localhost:8080/films/restoreById?id=6
+
+###
+POST http://localhost:8080/sales/register
+Content-Type: application/json
+
+{
+  "filmId": 9,
+  "price": 150
+}
