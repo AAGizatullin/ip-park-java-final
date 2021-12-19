@@ -130,7 +130,7 @@ public class FilmManager {
                     //language=PostgreSQL
                     """
                             SELECT id,name,price,production_year,country,genre,rating,views,image FROM films
-                            WHERE genre ILIKE :genre AND removed=FALSE
+                            WHERE array_to_string(genre, ' ') ILIKE :genre AND removed=FALSE
                             
                             """,
                     Map.of("genre", "%" + text.trim().toLowerCase() + "%"),

@@ -35,12 +35,6 @@ public class FilmController {
         return manager.getById(id);
     }
 
-    //Метод getById, выводит фильм по id, альтернативы предыдущему методу, отличия в анотациях
-    @GetMapping("/getById/{id}")
-    private FilmGetByIdResponseDTO getByIdFromPath(@PathVariable long id) {
-        return manager.getById(id);
-    }
-
     //Метод save, добавляет новый фильм к списку или изменяет имеющийся. В зависимости от заданного id
     @PostMapping("/save")
     private FilmSaveResponseDTO save(@RequestBody FilmSaveRequestDTO requestDTO) {
@@ -50,12 +44,6 @@ public class FilmController {
     //Метод removeById, удаляет(добавляет в корзину) фильм по заданному id
     @PostMapping("/removeById")
     private void removeByIdFromParam(@RequestParam long id) {
-        manager.removeById(id);
-    }
-
-    //Метод removeById, удаляет(добавляет в корзину) фильм по id, альтернатива предыдущему методу, отличия в анотации
-    @PostMapping("/removeById/{id}")
-    private void removeByIdFromPath(@PathVariable long id) {
         manager.removeById(id);
     }
 

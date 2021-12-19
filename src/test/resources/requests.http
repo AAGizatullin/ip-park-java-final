@@ -1,4 +1,4 @@
-###
+### Команда, позволяющая загрпузить медиа фаил
 
 POST http://localhost:8080/media/bytes
 Content-Type: image/jpeg
@@ -11,7 +11,7 @@ Content-Type: image/jpeg
  %}
 
 
-###
+### Команда, позволяющая загрпузить медиа фаил
 
 POST http://localhost:8080/media/multipart
 Content-Type: multipart/form-data; boundary=WebBoundary
@@ -23,7 +23,7 @@ Content-Type: image/jpeg
 < leviafan.jpg
 --WebBoundary--
 
-###
+### Команда, позволяющая загрпузить сразу несколько медиа фаилов
 
 POST http://localhost:8080/media/multi-multipart
 Content-Type: multipart/form-data; boundary=WebBoundary
@@ -40,26 +40,23 @@ Content-Type: audio/mpeg
 < music.mp3
 --WebBoundary--
 
-###
+### Команда, выводящая все фильмы
 
 GET http://localhost:8080/films/getAll
 
-###
+### Команда, выводящая фильм по id
 
-GET http://localhost:8080/films/getById?id=9
+GET http://localhost:8080/films/getById?id=4
 
-###
+### Команда, производящая поиск фильмов по названию
 
-GET http://localhost:8080/films/getById/1
+GET http://localhost:8080/films/searchByName?text=coc
 
-###
+### Команда, производящая поиск фильмов по жанру
 
-GET http://localhost:8080/films/searchByName?text=term
+GET http://localhost:8080/films/searchByGenre?text=hor
 
-###
-
-GET http://localhost:8080/films/searchByGenre?text=comedy
-###
+### Команда, добавляющая новый фильм в список
 
 POST http://localhost:8080/films/save
 Content-Type: application/json
@@ -81,7 +78,7 @@ Content-Type: application/json
   "image":"bath.jpg"
 }
 
-###
+### Команда, позволяющая изменить название и описание к фильму по заданному id
 
 POST http://localhost:8080/films/save
 Content-Type: application/json
@@ -102,23 +99,20 @@ Content-Type: application/json
   "image": "leviafan.jpg"
 }
 
-###
+### Команда, добавляющая фильм в корзину
 
 POST http://localhost:8080/films/removeById?id=6
 
-###
-
-POST http://localhost:8080/films/removeById/6
-
-###
+### Команда, возвращающая фильм из корзины
 
 POST http://localhost:8080/films/restoreById?id=6
 
-###
+### Команда, позволяющая купить фильм (получить доступ к просмотру)
+
 POST http://localhost:8080/sales/register
 Content-Type: application/json
 
 {
-  "filmId": 9,
-  "price": 150
+  "filmId": 3,
+  "price": 260
 }
