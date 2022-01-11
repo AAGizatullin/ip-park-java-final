@@ -23,7 +23,7 @@ public class FilmManager {
     private final NamedParameterJdbcTemplate template;
     private final FilmFullRowMapper filmFullRowMapper;
     private final FilmBasicRowMapper filmBasicRowMapper;
-    private final String defaultImage = "noimage.png";
+    private static final String DEFAULT_IMAGE = "noimage.png";
 
 
     //Get ALL
@@ -131,7 +131,7 @@ public class FilmManager {
                     """
                             SELECT id,name,price,production_year,country,genre,rating,views,image FROM films
                             WHERE array_to_string(genre, ' ') ILIKE :genre AND removed=FALSE
-                            
+                                                        
                             """,
                     Map.of("genre", "%" + text.trim().toLowerCase() + "%"),
                     filmFullRowMapper
@@ -264,8 +264,7 @@ public class FilmManager {
 
     // Get image
     private String getImage(String image) {
-        return image == null ? defaultImage : image;
+        return image == null ? DEFAULT_IMAGE : image;
     }
-
 
 }

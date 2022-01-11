@@ -46,7 +46,7 @@ GET http://localhost:8080/films/getAll
 
 ### Команда, выводящая фильм по id
 
-GET http://localhost:8080/films/getById?id=4
+GET http://localhost:8080/films/getById?id=3
 
 ### Команда, производящая поиск фильмов по названию
 
@@ -84,7 +84,7 @@ POST http://localhost:8080/films/save
 Content-Type: application/json
 
 {
-  "id": 9,
+  "id": 7,
   "name": "Левиафан",
   "price": 100,
   "productionYear": 2014,
@@ -114,5 +114,5 @@ Content-Type: application/json
 
 {
   "filmId": 3,
-  "price": 260
+  "price": 200
 }
