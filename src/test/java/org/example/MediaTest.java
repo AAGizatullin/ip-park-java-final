@@ -1,6 +1,10 @@
 package org.example;
 
+import org.hamcrest.core.StringEndsWith;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,13 +14,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.util.ResourceUtils;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.shaded.org.hamcrest.core.StringEndsWith;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Testcontainers
@@ -24,25 +25,56 @@ import java.nio.file.Path;
 @DirtiesContext
 @AutoConfigureMockMvc
 class MediaTest {
-    @Container
-    static DockerComposeContainer<?> compose = new DockerComposeContainer<>(
-            Path.of("docker-compose.yml").toFile());
+  @Container
+  static DockerComposeContainer<?> compose = new DockerComposeContainer<>(
+      Path.of("docker-compose.yml").toFile()
+  );
 
-    @Autowired
-    MockMvc mockMvc;
+  @Autowired
+  MockMvc mockMvc;
 
-    @Test
-    void shouldUploadSingleMultipart() throws Exception {
-        final MockMultipartFile file = new MockMultipartFile("file", "media.jpg", MediaType.IMAGE_JPEG_VALUE, Files.newInputStream(ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "media.jpg").toPath()));
+  @Test
+  void shouldUploadBytes() throws Exception {
+    final byte[] content = TestUtils.bytesFromResources("media.jpg");
 
-        mockMvc.perform(
-                        MockMvcRequestBuilders.multipart("/media/multipart")
-                                .file(file)
-                )
-                .andExpectAll(
-                        MockMvcResultMatchers.status().isOk(),
-                        MockMvcResultMatchers.jsonPath("$.name").value(StringEndsWith.endsWith(".jpg"))
-                );
+    mockMvc.perform(
+            MockMvcRequestBuilders.post("/media/bytes")
+                .contentType(MediaType.IMAGE_JPEG_VALUE)
+                .content(content)
+        )
+        .andExpectAll(
+            MockMvcResultMatchers.status().isOk(),
+            MockMvcResultMatchers.jsonPath("$.name").value(StringEndsWith.endsWith(".jpg"))
+        );
+  }
 
-    }
+  @Test
+  void shouldUploadSingleMultipart() throws Exception {
+    final MockMultipartFile file = new MockMultipartFile("file", "media.jpg", MediaType.IMAGE_JPEG_VALUE, TestUtils.inputStreamFromResources("media.jpg"));
+
+    mockMvc.perform(
+            MockMvcRequestBuilders.multipart("/media/multipart")
+                .file(file)
+        )
+        .andExpectAll(
+            MockMvcResultMatchers.status().isOk(),
+            MockMvcResultMatchers.jsonPath("$.name").value(StringEndsWith.endsWith(".jpg"))
+        );
+  }
+
+  @Test
+  void shouldUploadMultipleMultipart() throws Exception {
+    final MockMultipartFile image = new MockMultipartFile("files", "media.jpg", MediaType.IMAGE_JPEG_VALUE, TestUtils.inputStreamFromResources("media.jpg"));
+    final MockMultipartFile mp3 = new MockMultipartFile("files", "music.mp3", "audio/mpeg", TestUtils.inputStreamFromResources("music.mp3"));
+
+    mockMvc.perform(
+            MockMvcRequestBuilders.multipart("/media/multi-multipart")
+                .file(image)
+                .file(mp3)
+        )
+        .andExpectAll(
+            MockMvcResultMatchers.status().isOk(),
+            MockMvcResultMatchers.jsonPath("$.names.length()").value(2)
+        );
+  }
 }
