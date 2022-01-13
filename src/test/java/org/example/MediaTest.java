@@ -33,24 +33,11 @@ class MediaTest {
   @Autowired
   MockMvc mockMvc;
 
-  @Test
-  void shouldUploadBytes() throws Exception {
-    final byte[] content = TestUtils.bytesFromResources("media.jpg");
 
-    mockMvc.perform(
-            MockMvcRequestBuilders.post("/media/bytes")
-                .contentType(MediaType.IMAGE_JPEG_VALUE)
-                .content(content)
-        )
-        .andExpectAll(
-            MockMvcResultMatchers.status().isOk(),
-            MockMvcResultMatchers.jsonPath("$.name").value(StringEndsWith.endsWith(".jpg"))
-        );
-  }
 
   @Test
   void shouldUploadSingleMultipart() throws Exception {
-    final MockMultipartFile file = new MockMultipartFile("file", "media.jpg", MediaType.IMAGE_JPEG_VALUE, TestUtils.inputStreamFromResources("media.jpg"));
+    final MockMultipartFile file = new MockMultipartFile("file", "avatar.jpg", MediaType.IMAGE_JPEG_VALUE, TestUtils.inputStreamFromResources("avatar.jpg"));
 
     mockMvc.perform(
             MockMvcRequestBuilders.multipart("/media/multipart")
@@ -62,19 +49,5 @@ class MediaTest {
         );
   }
 
-  @Test
-  void shouldUploadMultipleMultipart() throws Exception {
-    final MockMultipartFile image = new MockMultipartFile("files", "media.jpg", MediaType.IMAGE_JPEG_VALUE, TestUtils.inputStreamFromResources("media.jpg"));
-    final MockMultipartFile mp3 = new MockMultipartFile("files", "music.mp3", "audio/mpeg", TestUtils.inputStreamFromResources("music.mp3"));
 
-    mockMvc.perform(
-            MockMvcRequestBuilders.multipart("/media/multi-multipart")
-                .file(image)
-                .file(mp3)
-        )
-        .andExpectAll(
-            MockMvcResultMatchers.status().isOk(),
-            MockMvcResultMatchers.jsonPath("$.names.length()").value(2)
-        );
-  }
 }
