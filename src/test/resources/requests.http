@@ -1,15 +1,3 @@
-### Команда, позволяющая загрпузить медиа фаил
-
-POST http://localhost:8080/media/bytes
-Content-Type: image/jpeg
-
-< bath.jpg
-
-> {%
- client.global.set('mediaName', response.body.name);
-
- %}
-
 
 ### Команда, позволяющая загрпузить медиа фаил
 
@@ -46,15 +34,15 @@ GET http://localhost:8080/films/getAll
 
 ### Команда, выводящая фильм по id
 
-GET http://localhost:8080/films/getById?id=3
+GET http://localhost:8080/films/getById?id=9
 
 ### Команда, производящая поиск фильмов по названию
 
-GET http://localhost:8080/films/searchByName?text=coc
+GET http://localhost:8080/films/searchByName?text=mil
 
 ### Команда, производящая поиск фильмов по жанру
 
-GET http://localhost:8080/films/searchByGenre?text=hor
+GET http://localhost:8080/films/searchByGenre?text=ca
 
 ### Команда, добавляющая новый фильм в список
 
@@ -84,7 +72,7 @@ POST http://localhost:8080/films/save
 Content-Type: application/json
 
 {
-  "id": 7,
+  "id": 9,
   "name": "Левиафан",
   "price": 100,
   "productionYear": 2014,
@@ -113,6 +101,6 @@ POST http://localhost:8080/sales/register
 Content-Type: application/json
 
 {
-  "filmId": 3,
-  "price": 200
+  "filmId": 9,
+  "price": 100
 }
